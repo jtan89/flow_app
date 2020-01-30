@@ -36,7 +36,7 @@ class _FlowAppState extends State<FlowApp> {
             ),
 
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(18.0),
               child: Text(
                   "The more you float - the better it gets - and the better you feel. Your 10th float is on us!"),
             ),
