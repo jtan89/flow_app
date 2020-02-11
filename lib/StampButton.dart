@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StampButton extends StatefulWidget {
   @override
@@ -10,15 +10,23 @@ class StampButton extends StatefulWidget {
 }
 
 class StampButtonState extends State<StampButton> {
-
+  //fields we want saved in local storage
   var currStampColor;
-  bool isActiveStamp;
+  var isActiveStamp;
   int pinInput;
   int validPin = 12345;
- 
 
   StampButtonState(
       {this.currStampColor = Colors.grey, this.isActiveStamp = true});
+
+    Map<String, dynamic> toJson() => {
+        'currStampColor': currStampColor,
+        'isActiveStamp': isActiveStamp,
+      };
+
+  StampButtonState.fromJson(Map<String, dynamic> json)
+      : currStampColor = json['currStampColor'],
+        isActiveStamp = json['isActiveStamp'];
 
   void validate() {
     this.currStampColor = Colors.blue;
@@ -74,7 +82,7 @@ class StampButtonState extends State<StampButton> {
       child: Text('Float'),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
       onPressed: () {
-        if(this.isActiveStamp == true) {
+        if (this.isActiveStamp == true) {
           _showDialog();
         }
       },
