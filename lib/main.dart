@@ -1,14 +1,11 @@
 import 'package:flow_app/rewards.dart';
 import 'package:flutter/material.dart';
-import './StampButton.dart';
-
 
 void main() {
   runApp(FlowApp());
 }
 
 class FlowApp extends StatefulWidget {
-  
   FlowApp();
 
   @override
@@ -17,14 +14,13 @@ class FlowApp extends StatefulWidget {
   }
 }
 
-
 class _FlowAppState extends State<FlowApp> {
+  int _selectedIndex = 0;
+  double rewardsProgress;
 
-int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
-  
   static const List<Widget> _selectedTitle = <Widget>[
     Text(
       'Rewards',
@@ -41,7 +37,7 @@ int _selectedIndex = 0;
   ];
 
   static List<Widget> _activePage = <Widget>[
-   RewardsWidget(),
+    RewardsWidget(),
     Text(
       'Book A Float',
       style: optionStyle,
@@ -57,7 +53,7 @@ int _selectedIndex = 0;
       _selectedIndex = index;
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -71,27 +67,25 @@ int _selectedIndex = 0;
           child: _activePage.elementAt(_selectedIndex),
         ),
         bottomNavigationBar: BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.star),
-          title: Text('Rewards'),
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.star),
+              title: Text('Rewards'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_today),
+              title: Text('Book a Float'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.menu),
+              title: Text('Blog'),
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.blue[800],
+          onTap: _onItemTapped,
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_today),
-          title: Text('Book a Float'),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.menu),
-          title: Text('Blog'),
-        ),
-      ],
-      currentIndex: _selectedIndex,
-      selectedItemColor: Colors.blue[800],
-      onTap: _onItemTapped,
-    ),
       ),
     );
   }
 }
-
-
