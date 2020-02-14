@@ -43,7 +43,7 @@ int _selectedIndex = 0;
   static List<Widget> _activePage = <Widget>[
    RewardsWidget(),
     Text(
-      'Booking',
+      'Book A Float',
       style: optionStyle,
     ),
     Text(
@@ -57,9 +57,7 @@ int _selectedIndex = 0;
       _selectedIndex = index;
     });
   }
-
-
-
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -67,6 +65,7 @@ int _selectedIndex = 0;
         appBar: AppBar(
           //title: Text('Flow Spa'),
           title: _selectedTitle.elementAt(_selectedIndex),
+          centerTitle: true,
         ),
         body: Center(
           child: _activePage.elementAt(_selectedIndex),
