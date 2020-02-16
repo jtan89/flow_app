@@ -16,6 +16,7 @@ class RewardsWidgetState extends State<RewardsWidget> {
   RewardsWidgetState();
 
   double _progress;
+  double _rewardPoints;
   int pinInput;
   int validPin = 12345;
 
@@ -29,8 +30,7 @@ class RewardsWidgetState extends State<RewardsWidget> {
     });
   }
 
-
-//SHARED PREFERENCE METHODS 
+//SHARED PREFERENCE METHODS
   Future<double> _getDoubleFromSharedPref() async {
     final prefs = await SharedPreferences.getInstance();
     final startNumber = prefs.getDouble('progress');
@@ -41,7 +41,10 @@ class RewardsWidgetState extends State<RewardsWidget> {
   }
 
   Future<void> _initializeProgress(value) async {
-    this._progress = value;
+    if (value <= 90.0) {
+      this._progress = value;
+    }
+    this._rewardPoints = value;
   }
 
   Future<void> increaseProgress() async {
@@ -49,9 +52,13 @@ class RewardsWidgetState extends State<RewardsWidget> {
     double lastProgress = await _getDoubleFromSharedPref();
 
     double currentProgress = lastProgress + 10.0;
+    setState(() {
+      this._rewardPoints = currentProgress;
+    });
+
     await prefs.setDouble('progress', currentProgress);
 
-    if (currentProgress < 90) {
+    if (currentProgress <= 90) {
       setState(() {
         this._progress = currentProgress;
       });
@@ -63,6 +70,7 @@ class RewardsWidgetState extends State<RewardsWidget> {
     await prefs.setDouble('progress', 0);
     setState(() {
       this._progress = 0.0;
+      this._rewardPoints = 0.0;
     });
   }
 
@@ -73,7 +81,8 @@ class RewardsWidgetState extends State<RewardsWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Container(child: Text('$_progress')),
+          Container(child: Text('Wave percentage value: $_progress')),
+          Container(child: Text('Total Reward Points: $_rewardPoints')),
           WaveProgress(
               250.0, Colors.lightBlueAccent, Colors.lightBlueAccent, _progress),
           Container(
