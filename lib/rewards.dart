@@ -15,7 +15,7 @@ class RewardsWidget extends StatefulWidget {
 class RewardsWidgetState extends State<RewardsWidget> {
   RewardsWidgetState();
 
-  double _progress;
+  double _wavePercent;
   double _rewardPoints;
   int pinInput;
   int validPin = 12345;
@@ -23,15 +23,15 @@ class RewardsWidgetState extends State<RewardsWidget> {
   @override
   void initState() {
     super.initState();
-    _getDoubleFromSharedPref().then((value) {
+    _getWaveProgress().then((value) {
       setState(() {
-        _initializeProgress(value);
+        _initializeRewards(value);
       });
     });
   }
 
 //SHARED PREFERENCE METHODS
-  Future<double> _getDoubleFromSharedPref() async {
+  Future<double> _getWaveProgress() async {
     final prefs = await SharedPreferences.getInstance();
     final startNumber = prefs.getDouble('progress');
     if (startNumber == null) {
@@ -40,36 +40,41 @@ class RewardsWidgetState extends State<RewardsWidget> {
     return startNumber;
   }
 
-  Future<void> _initializeProgress(value) async {
+  Future<void> _initializeRewards(value) async {
     if (value <= 90.0) {
-      this._progress = value;
+      this._wavePercent = value;
+    } else {
+      this._wavePercent = 90.0;
     }
     this._rewardPoints = value;
   }
 
-  Future<void> increaseProgress() async {
+  Future<void> increasePoints() async {
     final prefs = await SharedPreferences.getInstance();
-    double lastProgress = await _getDoubleFromSharedPref();
+    double lastProgress = await _getWaveProgress();
 
     double currentProgress = lastProgress + 10.0;
+
     setState(() {
       this._rewardPoints = currentProgress;
     });
 
-    await prefs.setDouble('progress', currentProgress);
-
     if (currentProgress <= 90) {
       setState(() {
-        this._progress = currentProgress;
+        this._wavePercent = currentProgress;
       });
     }
+
+    await prefs.setDouble('progress', currentProgress);
+    await prefs.setDouble('points', _rewardPoints);
   }
 
   Future<void> resetCounter() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setDouble('progress', 0);
+    await prefs.setDouble('progress', 0.0);
+    await prefs.setDouble('points', 0.0);
     setState(() {
-      this._progress = 0.0;
+      this._wavePercent = 0.0;
       this._rewardPoints = 0.0;
     });
   }
@@ -81,10 +86,10 @@ class RewardsWidgetState extends State<RewardsWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Container(child: Text('Wave percentage value: $_progress')),
+          Container(child: Text('Wave percentage value: $_wavePercent')),
           Container(child: Text('Total Reward Points: $_rewardPoints')),
-          WaveProgress(
-              250.0, Colors.lightBlueAccent, Colors.lightBlueAccent, _progress),
+          WaveProgress(250.0, Colors.lightBlueAccent, Colors.lightBlueAccent,
+              _wavePercent),
           Container(
             child: RaisedButton(
               child: Text('Log a Float!'),
@@ -135,7 +140,7 @@ class RewardsWidgetState extends State<RewardsWidget> {
               onPressed: () {
                 print(pinInput);
                 if (pinInput == validPin) {
-                  increaseProgress();
+                  increasePoints();
                   Navigator.of(context).pop();
                 } else {
                   print('notvalidated');
