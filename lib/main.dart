@@ -1,7 +1,9 @@
 import 'package:flow_app/rewards.dart';
 import 'package:flutter/material.dart';
+import 'service_locator.dart';
 
 void main() {
+  setupServiceLocator();
   runApp(FlowApp());
 }
 

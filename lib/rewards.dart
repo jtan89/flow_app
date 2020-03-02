@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wave_progress_widget/wave_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'StorageService.dart';
+import 'service_locator.dart';
 
 class RewardsWidget extends StatefulWidget {
   RewardsWidget();
@@ -15,6 +17,7 @@ class RewardsWidget extends StatefulWidget {
 class RewardsWidgetState extends State<RewardsWidget> {
   RewardsWidgetState();
 
+  StorageService _storageService = locator<StorageService>();
   double _wavePercent;
   double _rewardPoints;
   int pinInput;
@@ -23,21 +26,19 @@ class RewardsWidgetState extends State<RewardsWidget> {
   @override
   void initState() {
     super.initState();
-    _getWaveProgress().then((value) {
+    _getWaveProgress('progress').then((value) {
       setState(() {
         _initializeRewards(value);
       });
     });
   }
 
-//SHARED PREFERENCE METHODS
-  Future<double> _getWaveProgress() async {
-    final prefs = await SharedPreferences.getInstance();
-    final startNumber = prefs.getDouble('progress');
-    if (startNumber == null) {
-      return 0.0;
-    }
-    return startNumber;
+  ////////////////////////////////////
+  //METHODS TO HANDLE REWARD VALUES//
+  //////////////////////////////////
+
+  Future<double> _getWaveProgress(key) async {
+    return _storageService.getDoubleValue(key);
   }
 
   Future<void> _initializeRewards(value) async {
@@ -49,24 +50,19 @@ class RewardsWidgetState extends State<RewardsWidget> {
     this._rewardPoints = value;
   }
 
-  Future<void> increasePoints() async {
-    final prefs = await SharedPreferences.getInstance();
-    double lastProgress = await _getWaveProgress();
-
+  Future<void> increasePoints(key) async {
+    double lastProgress = await _getWaveProgress(key);
     double currentProgress = lastProgress + 10.0;
-
     setState(() {
       this._rewardPoints = currentProgress;
     });
-
     if (currentProgress <= 90) {
       setState(() {
         this._wavePercent = currentProgress;
       });
     }
-
-    await prefs.setDouble('progress', currentProgress);
-    await prefs.setDouble('points', _rewardPoints);
+    await _storageService.setDoubleValue('progress', currentProgress);
+    await _storageService.setDoubleValue('points', _rewardPoints);
   }
 
   Future<void> resetCounter() async {
@@ -139,9 +135,10 @@ class RewardsWidgetState extends State<RewardsWidget> {
               //Code onPressed to validate.
               onPressed: () {
                 print(pinInput);
-                if (pinInput == validPin) {
-                  increasePoints();
+                if (validPin == pinInput) {
+                  increasePoints('progress');
                   Navigator.of(context).pop();
+                  pinInput = null;
                 } else {
                   print('notvalidated');
                 }
