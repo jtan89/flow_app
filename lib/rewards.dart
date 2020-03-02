@@ -34,7 +34,7 @@ class RewardsWidgetState extends State<RewardsWidget> {
   }
 
   ////////////////////////////////////
-  //METHODS TO HANDLE REWARD VALUES//
+  //METHODS TO HANDLE REWARD VALUES.//
   //////////////////////////////////
 
   Future<double> _getWaveProgress(key) async {
