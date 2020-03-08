@@ -1,7 +1,7 @@
 
 import 'package:get_it/get_it.dart';
-import 'SharedPreferenceService.dart';
-import 'StorageService.dart';
+import 'Services/SharedPreferenceService.dart';
+import 'Services/StorageService.dart';
 
 GetIt locator = GetIt.instance;
 

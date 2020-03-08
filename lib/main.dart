@@ -25,7 +25,7 @@ class _FlowAppState extends State<FlowApp> {
 
   static const List<Widget> _selectedTitle = <Widget>[
     Text(
-      'Rewards',
+      'Flow Rewards',
       style: optionStyle,
     ),
     Text(
@@ -72,7 +72,7 @@ class _FlowAppState extends State<FlowApp> {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.star),
-              title: Text('Rewards'),
+              title: Text('Flow Rewards'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today),

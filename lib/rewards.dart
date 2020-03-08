@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wave_progress_widget/wave_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'StorageService.dart';
+import 'Services/StorageService.dart';
 import 'service_locator.dart';
 
 class RewardsWidget extends StatefulWidget {
@@ -20,8 +20,8 @@ class RewardsWidgetState extends State<RewardsWidget> {
   StorageService _storageService = locator<StorageService>();
   double _wavePercent;
   double _rewardPoints;
-  int pinInput;
-  int validPin = 12345;
+  int _pinInput;
+  int _validPin = 12345;
 
   @override
   void initState() {
@@ -34,7 +34,7 @@ class RewardsWidgetState extends State<RewardsWidget> {
   }
 
   ////////////////////////////////////
-  //METHODS TO HANDLE REWARD VALUES..//
+  //METHODS TO HANDLE REWARD VALUES//
   //////////////////////////////////
 
   Future<double> _getWaveProgress(key) async {
@@ -83,8 +83,20 @@ class RewardsWidgetState extends State<RewardsWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(child: Text('Wave percentage value: $_wavePercent')),
-          Container(child: Text('Total Reward Points: $_rewardPoints')),
-          WaveProgress(250.0, Colors.lightBlueAccent, Colors.lightBlueAccent,
+          Container(
+            child: Card(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.star),
+                    title: Text('$_rewardPoints Reward Points'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          WaveProgress(200.0, Colors.lightBlueAccent, Colors.lightBlueAccent,
               _wavePercent),
           Container(
             child: RaisedButton(
@@ -126,7 +138,7 @@ class RewardsWidgetState extends State<RewardsWidget> {
             keyboardType: TextInputType.number,
             inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
             onChanged: (value) {
-              pinInput = int.parse(value);
+              _pinInput = int.parse(value);
             },
           ),
           actions: [
@@ -134,11 +146,11 @@ class RewardsWidgetState extends State<RewardsWidget> {
               child: Text("Submit"),
               //Code onPressed to validate.
               onPressed: () {
-                print(pinInput);
-                if (validPin == pinInput) {
+                print(_pinInput);
+                if (_validPin == _pinInput) {
                   increasePoints('progress');
                   Navigator.of(context).pop();
-                  pinInput = null;
+                  _pinInput = null;
                 } else {
                   print('notvalidated');
                 }
