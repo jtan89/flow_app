@@ -26,6 +26,7 @@ dependencies:
   shared_preferences: ^0.5.6+1
   wave_progress_widget: ^0.0.1
   get_it: ^4.0.0
+  expandable: ^4.1.2
 
 dev_dependencies:
   flutter_test:

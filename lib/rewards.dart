@@ -1,3 +1,4 @@
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wave_progress_widget/wave_progress.dart';
@@ -22,6 +23,14 @@ class RewardsWidgetState extends State<RewardsWidget> {
   double _rewardPoints;
   int _pinInput;
   int _validPin = 12345;
+
+  final String someText = 
+"10 pts for the 1st paragraph\n\n"
+"20 pts for the 2nd paragraph\n\n"
+"30 pts for the 3rd paragraph\n\n"
+"40 pts for the 3rd paragraph\n\n"
+"50 pts for the 3rd paragraph\n\n"
+"60 pts for the 3rd paragraph\n\n";
 
   @override
   void initState() {
@@ -91,6 +100,15 @@ class RewardsWidgetState extends State<RewardsWidget> {
                   ListTile(
                     leading: Icon(Icons.star),
                     title: Text('$_rewardPoints Reward Points'),
+                  ),
+                  ExpandablePanel(
+                    header: Text(""),
+                    expanded: Text(
+                      someText,
+                      softWrap: true,
+                    ),
+                    hasIcon: true,
+                  
                   ),
                 ],
               ),
